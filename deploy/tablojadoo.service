@@ -1,0 +1,25 @@
+[Unit]
+Description=Tablojadoo marketing and sales panel
+After=network.target mysql.service mariadb.service
+Wants=network.target
+
+[Service]
+Type=simple
+User=tablojadoo
+Group=tablojadoo
+WorkingDirectory=/opt/tablojadoo
+EnvironmentFile=/opt/tablojadoo/.env
+Environment=NODE_ENV=production
+Environment=PORT=3000
+ExecStartPre=/usr/bin/pnpm exec drizzle-kit migrate
+ExecStart=/usr/bin/node /opt/tablojadoo/dist/index.js
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/tablojadoo
+
+[Install]
+WantedBy=multi-user.target
